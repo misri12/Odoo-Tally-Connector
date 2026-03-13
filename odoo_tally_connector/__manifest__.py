@@ -4,6 +4,7 @@
     "summary": "Export Odoo accounting data to Tally vouchers XML",
     "author": "Gultaj Khan",
     "category": "Accounting",
+    "images": ["static/img/connector_logo.jpeg"],
     "depends": ["account"],
     "data": [
         # Security

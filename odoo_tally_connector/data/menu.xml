@@ -1,0 +1,68 @@
+<odoo>
+
+    <!-- Root menu under Accounting / Invoicing configuration -->
+    <menuitem
+        id="tally_menu_root"
+        name="Tally"
+        parent="account.menu_finance_configuration"
+        sequence="50"/>
+
+    <!-- Configuration -->
+    <menuitem
+        id="tally_config_menu"
+        name="Configuration"
+        parent="tally_menu_root"
+        action="tally_configuration_action"
+        sequence="10"/>
+
+    <menuitem
+        id="tally_tax_mapping_menu"
+        name="GST Tax Mapping"
+        parent="tally_menu_root"
+        action="tax_mapping_action"
+        sequence="20"/>
+
+    <menuitem
+        id="tally_payment_mapping_menu"
+        name="Payment Mapping"
+        parent="tally_menu_root"
+        action="payment_mapping_action"
+        sequence="30"/>
+
+    <menuitem
+        id="tally_product_ledger_menu"
+        name="Product / Category Ledger"
+        parent="tally_menu_root"
+        action="tally_product_ledger_action"
+        sequence="40"/>
+
+    <menuitem
+        id="tally_xml_tag_menu"
+        name="Tally XML Tags"
+        parent="tally_menu_root"
+        action="xml_tag_action"
+        sequence="50"/>
+
+    <menuitem
+        id="tally_field_mapping_menu"
+        name="Tally Field Mapping"
+        parent="tally_menu_root"
+        action="field_mapping_action"
+        sequence="60"/>
+
+    <!-- XML generation wizard entry inside Tally configuration as well -->
+    <menuitem
+        id="tally_generate_xml_menu_config"
+        name="Generate Tally XML"
+        parent="tally_menu_root"
+        action="generate_xml_action"
+        sequence="70"/>
+
+    <!-- XML generation wizard entry under Customers -->
+    <menuitem
+        id="tally_generate_xml_menu"
+        name="Generate Tally XML"
+        parent="account.menu_finance_entries"
+        action="generate_xml_action"
+        sequence="70"/>
+</odoo>

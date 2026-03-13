@@ -1,0 +1,45 @@
+<odoo>
+    <record id="tally_product_ledger_tree" model="ir.ui.view">
+        <field name="name">tally.product.ledger.tree</field>
+        <field name="model">tally.product.ledger</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence"/>
+                <field name="configuration_id"/>
+                <field name="mapping_mode"/>
+                <field name="product_id"/>
+                <field name="category_id"/>
+                <field name="ledger_name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="tally_product_ledger_form" model="ir.ui.view">
+        <field name="name">tally.product.ledger.form</field>
+        <field name="model">tally.product.ledger</field>
+        <field name="arch" type="xml">
+            <form string="Tally Product Ledger Mapping">
+                <sheet>
+                    <group>
+                        <field name="configuration_id"/>
+                        <field name="sequence"/>
+                    </group>
+                    <group>
+                        <field name="product_id"/>
+                        <field name="category_id"/>
+                        <field name="mapping_mode" readonly="1"/>
+                        <field name="ledger_name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="tally_product_ledger_action" model="ir.actions.act_window">
+        <field name="name">Tally Product / Category Ledger</field>
+        <field name="res_model">tally.product.ledger</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+    </record>
+</odoo>
+

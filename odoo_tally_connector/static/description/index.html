@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Odoo Tally Connector</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        --primary: #4c6fff;
+        --primary-dark: #3745b5;
+        --bg: #f5f6fa;
+        --card-bg: #ffffff;
+        --text-main: #222433;
+        --text-muted: #6b6f80;
+        --border-radius-lg: 14px;
+        --border-radius-md: 10px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        background: var(--bg);
+        color: var(--text-main);
+        line-height: 1.6;
+      }
+
+      .page {
+        max-width: 1120px;
+        margin: 32px auto 48px;
+        padding: 0 16px 32px;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #4c6fff, #00a0e0);
+        color: #fff;
+        padding: 32px 28px;
+        border-radius: 20px;
+        display: grid;
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+        gap: 24px;
+        box-shadow: 0 18px 45px rgba(8, 24, 71, 0.35);
+      }
+
+      @media (max-width: 900px) {
+        .hero {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .hero-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0 0 6px;
+      }
+
+      .hero-subtitle {
+        margin: 0 0 18px;
+        font-size: 15px;
+        opacity: 0.92;
+      }
+
+      .hero-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+
+      .tag {
+        font-size: 11px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        background: rgba(0, 0, 0, 0.08);
+      }
+
+      .hero-bullets {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 4px;
+        font-size: 13px;
+      }
+
+      .hero-bullets li::before {
+        content: "•";
+        margin-right: 6px;
+        color: #ffe58a;
+      }
+
+      .hero-panel {
+        background: rgba(9, 22, 58, 0.2);
+        border-radius: 16px;
+        padding: 18px 18px 16px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .hero-panel-title {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        opacity: 0.9;
+      }
+
+      .hero-steps {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 8px;
+        font-size: 13px;
+      }
+
+      .hero-step-label {
+        font-weight: 600;
+      }
+
+      h2 {
+        margin: 28px 0 10px;
+        font-size: 20px;
+      }
+
+      h3 {
+        margin: 20px 0 6px;
+        font-size: 16px;
+      }
+
+      p {
+        margin: 6px 0 10px;
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      @media (min-width: 900px) {
+        .grid--2 {
+          grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+        }
+      }
+
+      .card {
+        background: var(--card-bg);
+        border-radius: var(--border-radius-lg);
+        padding: 18px 20px 18px;
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+        border: 1px solid #e4e6f0;
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .badge {
+        background: rgba(76, 111, 255, 0.1);
+        color: var(--primary-dark);
+        font-size: 11px;
+        padding: 3px 9px;
+        border-radius: 999px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .steps {
+        counter-reset: step;
+        margin: 6px 0;
+        padding-left: 0;
+        list-style: none;
+      }
+
+      .steps li {
+        display: grid;
+        grid-template-columns: 26px minmax(0, 1fr);
+        gap: 10px;
+        align-items: flex-start;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      .steps li::before {
+        counter-increment: step;
+        content: counter(step);
+        height: 22px;
+        width: 22px;
+        border-radius: 999px;
+        background: var(--primary);
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .steps-compact li {
+        margin-bottom: 4px;
+      }
+
+      .taglist {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 6px;
+      }
+
+      .tagchip {
+        background: #f1f2f7;
+        border-radius: 999px;
+        padding: 2px 9px;
+        font-size: 11px;
+        color: #4b4f63;
+      }
+
+      .kbd {
+        font-family: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono",
+          "Courier New", monospace;
+        font-size: 12px;
+        background: #f4f5fb;
+        padding: 2px 4px;
+        border-radius: 4px;
+        border: 1px solid #d8dbeb;
+      }
+
+      .shot-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+        gap: 14px;
+        align-items: flex-start;
+        margin-top: 10px;
+      }
+
+      @media (max-width: 900px) {
+        .shot-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .shot-card {
+        border-radius: var(--border-radius-md);
+        background: #f8f9ff;
+        padding: 10px 12px 12px;
+        border: 1px solid #e2e4f5;
+      }
+
+      .shot-title {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: var(--text-main);
+      }
+
+      .shot-caption {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 4px;
+      }
+
+      .shot-img-wrapper {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.18);
+        border: 1px solid #dde0f0;
+        background: #fff;
+      }
+
+      .shot-img-wrapper img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <section class="hero">
+        <div>
+          <h1 class="hero-title">Odoo Tally Connector</h1>
+          <p class="hero-subtitle">
+            Enterprise‑grade connector to export Odoo Accounting data into
+            Tally‑compatible XML vouchers that can be imported from
+            <strong>Gateway of Tally → Import Data → Vouchers</strong>.
+          </p>
+          <div class="hero-tags">
+            <span class="tag">Odoo 14 – 17</span>
+            <span class="tag">Customer &amp; Vendor Invoices</span>
+            <span class="tag">Payments &amp; Bill Allocation</span>
+            <span class="tag">GST / Ledger Mapping</span>
+          </div>
+          <ul class="hero-bullets">
+            <li>Generate high‑performance Tally XML for thousands of vouchers.</li>
+            <li>Create ledgers on the fly if they do not exist in Tally.</li>
+            <li>Supports inventory lines, GST (CGST/SGST/IGST/CESS) and bill allocations.</li>
+          </ul>
+        </div>
+
+        <aside class="hero-panel">
+          <div class="hero-panel-title">Quick start (3 steps)</div>
+          <ol class="hero-steps">
+            <li>
+              <span class="hero-step-label">Configure mapping in Odoo</span><br />
+              Accounting → Configuration → Tally (ledgers, GST, payments).
+            </li>
+            <li>
+              <span class="hero-step-label">Generate XML from Odoo</span><br />
+              Accounting → Customers → Generate Tally XML.
+            </li>
+            <li>
+              <span class="hero-step-label">Import into Tally</span><br />
+              In Tally: Gateway of Tally → Import Data → Vouchers.
+            </li>
+          </ol>
+        </aside>
+      </section>
+
+      <section>
+        <h2>1. Prerequisites</h2>
+        <div class="card">
+          <ul class="steps steps-compact">
+            <li>
+              <div>
+                Odoo 14, 15, 16 or 17 with the
+                <span class="kbd">account</span> app installed.
+              </div>
+            </li>
+            <li>
+              <div>
+                Tally ERP (Prime / ERP 9) installed locally with access to the
+                company where vouchers will be imported.
+              </div>
+            </li>
+            <li>
+              <div>
+                Basic chart of accounts configured in both Odoo and Tally
+                (customers, vendors, taxes, cash / bank ledgers, etc.).
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="grid grid--2">
+        <article class="card">
+          <div class="card-header">
+            <h2>2. Configure Tally in Odoo</h2>
+            <span class="badge">Accounting → Configuration → Tally</span>
+          </div>
+          <div class="shot-grid">
+            <div>
+              <p>
+                Open the <strong>Tally Configuration</strong> menu and create one
+                configuration per company. This defines default ledgers and
+                behaviour when mapping is not explicit.
+              </p>
+              <h3>2.1 Default ledgers</h3>
+              <ul class="steps steps-compact">
+                <li>
+                  <div>
+                    <strong>Default Sales Ledger</strong> — used when no
+                    product/category ledger is found for sales invoices.
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <strong>Default Purchase Ledger</strong> — used when no mapping
+                    is found for vendor bills.
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <strong>Default Tax Ledger</strong> — fallback ledger for GST
+                    when a specific mapping is missing.
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <strong>Enable Bill Allocation</strong> — when enabled, payment
+                    vouchers contain <span class="kbd">BILLALLOCATIONS.LIST</span>
+                    for automatic invoice settlement in Tally.
+                  </div>
+                </li>
+              </ul>
+
+              <h3>2.2 Product / category ledger mapping</h3>
+              <p>
+                In the <strong>Product / Category Ledger Mapping</strong> tab,
+                define which Tally ledger should be used for each product or
+                product category.
+              </p>
+              <div class="taglist">
+                <span class="tagchip">Product‑wise mapping</span>
+                <span class="tagchip">Category‑wise mapping</span>
+                <span class="tagchip">Fallback to default ledgers</span>
+              </div>
+              <div class="shot-card" style="margin-top:10px;">
+                <div class="shot-title">Product / category ledger mapping</div>
+                <div class="shot-img-wrapper">
+                  <img src="../img/Tally_Product.png" alt="Tally product ledger mapping form in Odoo" />
+                </div>
+                <div class="shot-caption">
+                  Route each product or category to the appropriate revenue or expense ledger in Tally.
+                </div>
+              </div>
+            </div>
+            <div class="shot-card">
+              <div class="shot-title">Tally configuration screen</div>
+              <div class="shot-img-wrapper">
+                <img src="../img/Tally_Configration.png" alt="Tally Configuration form in Odoo" />
+              </div>
+              <div class="shot-caption">
+                Define default ledgers, bill allocation and mapping rules per company.
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <h2>3. Map Taxes, Payments &amp; Tags</h2>
+            <span class="badge">Configuration menus</span>
+          </div>
+
+          <h3>3.1 GST Tax Mapping</h3>
+          <div class="shot-grid">
+            <div>
+              <p>
+                Use <strong>Tally GST Tax Mapping</strong> to link Odoo taxes to
+                Tally GST ledgers.
+              </p>
+              <ul class="steps steps-compact">
+                <li>
+                  <div>
+                    Select the <strong>Odoo tax</strong>
+                    (e.g. “CGST 9%”).
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    Set <strong>GST Type</strong>:
+                    <span class="kbd">CGST</span>,
+                    <span class="kbd">SGST</span>,
+                    <span class="kbd">IGST</span>,
+                    <span class="kbd">CESS</span>.
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    Enter the <strong>Tally Ledger Name</strong>
+                    exactly as defined in Tally.
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="shot-card">
+              <div class="shot-title">GST tax mapping</div>
+              <div class="shot-img-wrapper">
+                <img src="../img/Tally_Gst_mapping.png" alt="GST tax mapping form in Odoo" />
+              </div>
+              <div class="shot-caption">
+                Map each Odoo GST tax to the correct CGST/SGST/IGST/CESS ledger in Tally.
+              </div>
+            </div>
+          </div>
+
+          <h3>3.2 Payment method mapping</h3>
+          <div class="shot-grid">
+            <div>
+              <p>
+                In <strong>Payment Mapping</strong>, connect Odoo payment journals
+                (Cash / Bank) to Tally Cash or Bank ledgers. This controls the
+                ledger used in Tally Receipt and Payment vouchers.
+              </p>
+            </div>
+            <div class="shot-card">
+              <div class="shot-title">Payment method mapping</div>
+              <div class="shot-img-wrapper">
+                <img src="../img/Tally_Payment_Mapping.png" alt="Payment mapping form in Odoo" />
+              </div>
+              <div class="shot-caption">
+                Link each Odoo cash/bank journal to the corresponding Tally ledger.
+              </div>
+            </div>
+          </div>
+
+          <h3>3.3 XML tags &amp; field mapping (advanced)</h3>
+          <div class="shot-grid">
+            <div>
+              <p>
+                For advanced setups you can configure:
+              </p>
+              <ul class="steps steps-compact">
+                <li>
+                  <div>
+                    <strong>Tally XML Tags</strong> — list of available XML element
+                    names (e.g. <span class="kbd">LEDGERNAME</span>,
+                    <span class="kbd">DATE</span>, <span class="kbd">AMOUNT</span>).
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <strong>Tally Field Mapping</strong> — link each XML tag to an
+                    Odoo field expression or Python expression if you need full
+                    control.
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="shot-card">
+              <div class="shot-title">XML tags &amp; field mapping</div>
+              <div class="shot-img-wrapper" style="margin-bottom:10px;">
+                <img src="../img/Tally_Xml_Tags.png" alt="Tally XML tags form in Odoo" />
+              </div>
+              <div class="shot-img-wrapper">
+                <img src="../img/Tally_fields_mapping.png" alt="Tally field mapping form in Odoo" />
+              </div>
+              <div class="shot-caption">
+                Define the XML tag catalog and map each tag to an Odoo field or expression.
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid grid--2">
+        <article class="card">
+          <div class="card-header">
+            <h2>4. Generate Tally XML from Odoo</h2>
+            <span class="badge">Accounting → Customers</span>
+          </div>
+          <p>
+            Go to <strong>Accounting → Customers → Generate Tally XML</strong>
+            to open the export wizard.
+          </p>
+          <ul class="steps">
+            <li>
+              <div>
+                <strong>Select configuration &amp; company.</strong> Choose the
+                Tally configuration that corresponds to the company whose
+                vouchers you want to export.
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Filter by dates or pick documents.</strong> Either set a
+                date range, or manually select:
+                <ul>
+                  <li>Customer invoices / credit notes</li>
+                  <li>Vendor bills / debit notes</li>
+                  <li>Customer / vendor payments</li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Choose document types.</strong> Enable or disable each
+                type (customer invoices, vendor bills, payments, etc.) using the
+                checkboxes.
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Click “Generate XML”.</strong> The module generates a
+                Tally‑compatible XML file and offers it as a download.
+              </div>
+            </li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <h2>5. Import vouchers into Tally</h2>
+            <span class="badge">From Tally ERP</span>
+          </div>
+          <ul class="steps">
+            <li>
+              <div>
+                <strong>Open the target company</strong> in Tally where vouchers
+                should be imported.
+              </div>
+            </li>
+            <li>
+              <div>
+                Go to
+                <strong>Gateway of Tally → Import Data → Vouchers</strong>.
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Browse &amp; select</strong> the XML file exported from
+                Odoo.
+              </div>
+            </li>
+            <li>
+              <div>
+                Review the import summary. If Tally warns that some ledgers are
+                missing, you can allow it to create them automatically or adjust
+                your Odoo mappings so the correct ledger names are used.
+              </div>
+            </li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="grid grid--2">
+        <article class="card">
+          <div class="card-header">
+            <h2>6. What is exported?</h2>
+            <span class="badge">Voucher coverage</span>
+          </div>
+          <p>The connector exports the following voucher types:</p>
+          <ul class="steps steps-compact">
+            <li>
+              <div>
+                <strong>Customer invoices</strong> → Sales vouchers with
+                inventory lines and GST tax lines.
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Vendor bills</strong> → Purchase vouchers with product
+                and tax breakdown.
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Credit / debit notes</strong> → Credit Note / Debit Note
+                voucher types in Tally.
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Customer payments</strong> → Receipt vouchers with
+                optional bill allocation.
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Vendor payments</strong> → Payment vouchers with
+                settlement against bills.
+              </div>
+            </li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <h2>7. Tips &amp; troubleshooting</h2>
+            <span class="badge">Best practice</span>
+          </div>
+          <ul class="steps steps-compact">
+            <li>
+              <div>
+                <strong>Match ledger names exactly.</strong> Tally uses the
+                ledger name as a key. Ensure the names in Odoo configuration
+                match Tally ledgers character‑for‑character (including spaces
+                and case).
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Start with a test company or backup.</strong> Always
+                test voucher imports on a copy of your Tally data before
+                importing into production.
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Check GST totals.</strong> After import, verify that
+                CGST/SGST/IGST totals in Tally match the Odoo tax reports for
+                the same period.
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Use bill allocation carefully.</strong> If an invoice is
+                already partially settled in Tally, avoid re‑importing payments
+                for the same invoice from Odoo to prevent duplicate
+                allocations.
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Performance.</strong> For very large exports, limit the
+                date range and generate multiple smaller XML files rather than a
+                single huge batch.
+              </div>
+            </li>
+          </ul>
+        </article>
+      </section>
+    </div>
+  </body>
+</html>
+

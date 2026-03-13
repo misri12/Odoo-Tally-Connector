@@ -1,5 +1,5 @@
 {
-    "name": "Odoo Tally Connector",
+    "name": "tally_xml_export_odoo",
     "version": "16.0.1.0.0",
     "summary": "Export Odoo accounting data to Tally vouchers XML",
     "author": "Gultaj Khan",

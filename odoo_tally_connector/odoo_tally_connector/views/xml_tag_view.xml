@@ -1,0 +1,38 @@
+<odoo>
+    <record id="xml_tag_tree" model="ir.ui.view">
+        <field name="name">tally.xml.tag.tree</field>
+        <field name="model">tally.xml.tag</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="xml_tag"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="xml_tag_form" model="ir.ui.view">
+        <field name="name">tally.xml.tag.form</field>
+        <field name="model">tally.xml.tag</field>
+        <field name="arch" type="xml">
+            <form string="Tally XML Tag">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="xml_tag"/>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="xml_tag_action" model="ir.actions.act_window">
+        <field name="name">Tally XML Tags</field>
+        <field name="res_model">tally.xml.tag</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+    </record>
+</odoo>

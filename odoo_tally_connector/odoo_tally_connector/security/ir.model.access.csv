@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tally_configuration,access_tally_configuration,model_tally_configuration,account.group_account_manager,1,1,1,1
+access_tally_xml_tag,access_tally_xml_tag,model_tally_xml_tag,account.group_account_manager,1,1,1,1
+access_tally_field_mapping,access_tally_field_mapping,model_tally_field_mapping,account.group_account_manager,1,1,1,1
+access_tally_tax_mapping,access_tally_tax_mapping,model_tally_tax_mapping,account.group_account_manager,1,1,1,1
+access_tally_payment_mapping,access_tally_payment_mapping,model_tally_payment_mapping,account.group_account_manager,1,1,1,1
+access_tally_product_ledger,access_tally_product_ledger,model_tally_product_ledger,account.group_account_manager,1,1,1,1
+access_tally_generate_xml,access_tally_generate_xml,model_tally_generate_xml,account.group_account_manager,1,1,1,1
+access_tally_generate_xml_user,access_tally_generate_xml_user,model_tally_generate_xml,,1,1,1,1

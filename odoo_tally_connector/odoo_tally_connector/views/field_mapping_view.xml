@@ -1,0 +1,49 @@
+<odoo>
+    <record id="field_mapping_tree" model="ir.ui.view">
+        <field name="name">tally.field.mapping.tree</field>
+        <field name="model">tally.field.mapping</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="xml_tag_id"/>
+                <field name="model_id"/>
+                <field name="odoo_field"/>
+                <field name="eval_python"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="field_mapping_form" model="ir.ui.view">
+        <field name="name">tally.field.mapping.form</field>
+        <field name="model">tally.field.mapping</field>
+        <field name="arch" type="xml">
+            <form string="Tally Field Mapping">
+                <sheet>
+                    <group>
+                        <field name="sequence"/>
+                        <field name="name"/>
+                        <field name="active"/>
+                    </group>
+                    <group>
+                        <field name="xml_tag_id"/>
+                        <field name="model_id" options="{'no_create_edit': True}"/>
+                        <field name="odoo_field"/>
+                        <field name="eval_python"/>
+                    </group>
+                    <group>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="field_mapping_action" model="ir.actions.act_window">
+        <field name="name">Tally Field Mapping</field>
+        <field name="res_model">tally.field.mapping</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+    </record>
+</odoo>

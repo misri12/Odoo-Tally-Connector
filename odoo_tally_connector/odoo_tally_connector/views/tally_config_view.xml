@@ -1,0 +1,76 @@
+<odoo>
+    <record id="view_tally_configuration_form" model="ir.ui.view">
+        <field name="name">tally.configuration.form</field>
+        <field name="model">tally.configuration</field>
+        <field name="arch" type="xml">
+            <form string="Tally Configuration">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="company_id"/>
+                    </group>
+                    <group string="Default Ledgers">
+                        <field name="default_sales_ledger"/>
+                        <field name="default_purchase_ledger"/>
+                        <field name="default_tax_ledger"/>
+                        <field name="enable_bill_allocation"/>
+                    </group>
+                    <notebook>
+                        <page string="Product / Category Ledger Mapping">
+                            <field name="product_ledger_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="mapping_mode" readonly="1"/>
+                                    <field name="product_id"/>
+                                    <field name="category_id"/>
+                                    <field name="ledger_name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="GST Tax Mapping">
+                            <field name="tax_mapping_ids">
+                                <tree editable="bottom">
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="tax_id"/>
+                                    <field name="gst_type"/>
+                                    <field name="tally_ledger_name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Payment Mapping">
+                            <field name="payment_mapping_ids">
+                                <tree editable="bottom">
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="journal_id"/>
+                                    <field name="tally_ledger_name"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tally_configuration_tree" model="ir.ui.view">
+        <field name="name">tally.configuration.tree</field>
+        <field name="model">tally.configuration</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="default_sales_ledger"/>
+                <field name="default_purchase_ledger"/>
+                <field name="default_tax_ledger"/>
+                <field name="enable_bill_allocation"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="tally_configuration_action" model="ir.actions.act_window">
+        <field name="name">Tally Configuration</field>
+        <field name="res_model">tally.configuration</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+    </record>
+</odoo>

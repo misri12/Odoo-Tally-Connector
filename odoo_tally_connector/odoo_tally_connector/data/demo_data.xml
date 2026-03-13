@@ -1,0 +1,131 @@
+<odoo noupdate="0">
+
+    <!-- Demo Tally Configuration for main company -->
+    <record id="tally_demo_configuration" model="tally.configuration">
+        <field name="name">Demo Tally Configuration</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="default_sales_ledger">Sales-INTRA</field>
+        <field name="default_purchase_ledger">Purchase-INTRA</field>
+        <field name="default_tax_ledger">GST Output</field>
+        <field name="enable_bill_allocation">True</field>
+    </record>
+
+    <!-- Demo product and category used by product ledger mapping -->
+    <record id="tally_demo_product_category" model="product.category">
+        <field name="name">Tally Demo Products</field>
+    </record>
+
+    <record id="tally_demo_product" model="product.product">
+        <field name="name">Demo Product</field>
+        <field name="categ_id" ref="tally_demo_product_category"/>
+    </record>
+
+    <!-- Demo product/category ledger mappings -->
+    <record id="tally_demo_product_ledger_product" model="tally.product.ledger">
+        <field name="configuration_id" ref="tally_demo_configuration"/>
+        <field name="sequence">10</field>
+        <field name="product_id" ref="tally_demo_product"/>
+        <field name="ledger_name">Sales-INTRA</field>
+    </record>
+
+    <record id="tally_demo_product_ledger_category" model="tally.product.ledger">
+        <field name="configuration_id" ref="tally_demo_configuration"/>
+        <field name="sequence">20</field>
+        <field name="category_id" ref="tally_demo_product_category"/>
+        <field name="ledger_name">Sales-Category</field>
+    </record>
+
+    <!-- Demo GST tax used by tax mapping -->
+    <record id="tally_demo_tax_cgst_9" model="account.tax">
+        <field name="name">CGST 9%</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="type_tax_use">sale</field>
+        <field name="amount_type">percent</field>
+        <field name="amount">9.0</field>
+        <field name="price_include">False</field>
+    </record>
+
+    <record id="tally_demo_tax_mapping_cgst_9" model="tally.tax.mapping">
+        <field name="company_id" ref="base.main_company"/>
+        <field name="configuration_id" ref="tally_demo_configuration"/>
+        <field name="tax_id" ref="tally_demo_tax_cgst_9"/>
+        <field name="gst_type">cgst</field>
+        <field name="tally_ledger_name">CGST 9%</field>
+    </record>
+
+    <!-- Demo bank account and journal used by payment mapping -->
+    <record id="tally_demo_bank_account" model="account.account">
+        <field name="name">Tally Demo Bank</field>
+        <field name="code">TDBANK</field>
+        <field name="user_type_id" ref="account.data_account_type_liquidity"/>
+        <field name="reconcile">True</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <record id="tally_demo_bank_journal" model="account.journal">
+        <field name="name">Tally Demo Bank</field>
+        <field name="code">TDB</field>
+        <field name="type">bank</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="default_account_id" ref="tally_demo_bank_account"/>
+    </record>
+
+    <record id="tally_demo_payment_mapping_bank" model="tally.payment.mapping">
+        <field name="company_id" ref="base.main_company"/>
+        <field name="configuration_id" ref="tally_demo_configuration"/>
+        <field name="journal_id" ref="tally_demo_bank_journal"/>
+        <field name="tally_ledger_name">Bank</field>
+    </record>
+
+    <!-- Demo XML tags -->
+    <record id="tally_demo_tag_ledgername" model="tally.xml.tag">
+        <field name="name">Ledger Name</field>
+        <field name="xml_tag">LEDGERNAME</field>
+        <field name="description">Name of the ledger in Tally.</field>
+    </record>
+
+    <record id="tally_demo_tag_date" model="tally.xml.tag">
+        <field name="name">Voucher Date</field>
+        <field name="xml_tag">DATE</field>
+        <field name="description">Voucher date in YYYYMMDD format.</field>
+    </record>
+
+    <record id="tally_demo_tag_amount" model="tally.xml.tag">
+        <field name="name">Voucher Amount</field>
+        <field name="xml_tag">AMOUNT</field>
+        <field name="description">Total voucher amount.</field>
+    </record>
+
+    <!-- Demo field mappings for account.move -->
+    <record id="tally_demo_field_mapping_ledgername" model="tally.field.mapping">
+        <field name="sequence">10</field>
+        <field name="name">Customer / Vendor name</field>
+        <field name="xml_tag_id" ref="tally_demo_tag_ledgername"/>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="odoo_field">partner_id.name</field>
+        <field name="eval_python">False</field>
+        <field name="active">True</field>
+    </record>
+
+    <record id="tally_demo_field_mapping_date" model="tally.field.mapping">
+        <field name="sequence">20</field>
+        <field name="name">Invoice Date</field>
+        <field name="xml_tag_id" ref="tally_demo_tag_date"/>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="odoo_field">invoice_date</field>
+        <field name="eval_python">False</field>
+        <field name="active">True</field>
+    </record>
+
+    <record id="tally_demo_field_mapping_amount" model="tally.field.mapping">
+        <field name="sequence">30</field>
+        <field name="name">Total Amount</field>
+        <field name="xml_tag_id" ref="tally_demo_tag_amount"/>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="odoo_field">amount_total_signed</field>
+        <field name="eval_python">False</field>
+        <field name="active">True</field>
+    </record>
+
+</odoo>
+

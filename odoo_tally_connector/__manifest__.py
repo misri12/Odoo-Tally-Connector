@@ -24,7 +24,5 @@
     "installable": True,
     "application": True,
     "license": "LGPL-3",
-    "description": "static/description/index.html",
-    "currency": "USD",
-    "price": 130,
+    "description": "static/description/index.html"
 }
